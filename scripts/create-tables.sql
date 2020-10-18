@@ -1,3 +1,4 @@
+
 CREATE TABLE app.Communes
 (
 	id serial PRIMARY KEY,
