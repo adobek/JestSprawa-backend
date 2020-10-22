@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Reaction {
 
     @Id
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "issue_id")
     private Issue issue;
 
