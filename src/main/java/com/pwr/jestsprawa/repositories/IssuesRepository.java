@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IssuesRepository extends CrudRepository<Issue, Long> {
@@ -18,4 +19,7 @@ public interface IssuesRepository extends CrudRepository<Issue, Long> {
             "AND ss1.date < ss2.date WHERE ss2.date IS NULL AND ss1.status_id = :status) ss3 " +
             "ON i.id = ss3.issue_id", nativeQuery = true)
     List<Issue> findAllByStatusId(@Param("status") int status);
+
+    Optional<Issue> findIssueById(int id);
+
 }
