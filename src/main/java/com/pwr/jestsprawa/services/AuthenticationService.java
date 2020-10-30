@@ -1,13 +1,16 @@
 package com.pwr.jestsprawa.services;
 
+import com.pwr.jestsprawa.config.security.JwtTokenProvider;
 import com.pwr.jestsprawa.exceptions.EmailAlreadyInUseException;
-import com.pwr.jestsprawa.model.UserRegisterDto;
-import com.pwr.jestsprawa.model.Role;
-import com.pwr.jestsprawa.model.RoleType;
-import com.pwr.jestsprawa.model.User;
+import com.pwr.jestsprawa.exceptions.UserNotFoundException;
+import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.repositories.RoleRepository;
 import com.pwr.jestsprawa.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +27,17 @@ public class AuthenticationService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtTokenProvider tokenProvider;
+
     @Transactional
     public User register(UserRegisterDto userRegisterDto) {
-        Optional<User> userWithSameEmail = userRepository.findByEmailIgnoreCase(userRegisterDto.getEmail());
+        Optional<User> userWithSameEmail = userRepository.findOneByEmailIgnoreCase(userRegisterDto.getEmail());
         if (userWithSameEmail.isPresent())
             throw new EmailAlreadyInUseException();
 
-        Role userRole = roleRepository.findByName(RoleType.APPLICANT.getName());
+        Role userRole = roleRepository.findByName(RoleType.ROLE_APPLICANT.getName());
         User user = new User();
         user.setFirstName(userRegisterDto.getFirstName());
         user.setLastName(userRegisterDto.getLastName());
@@ -40,6 +47,16 @@ public class AuthenticationService {
 
         userRepository.save(user);
         return user;
+    }
+
+    public LoginResponseDto authenticate(UserLoginDto userLoginDto) {
+        var authenticationToken = new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        var user = userRepository.findOneByEmailIgnoreCase(authentication.getName())
+                .orElseThrow(UserNotFoundException::new);
+        var jwtToken = tokenProvider.createToken(authentication.getName(), RoleType.fromString(user.getRole().getName()).name());
+        return LoginResponseDto.fromUserWithToken(user, jwtToken);
     }
 
 }
