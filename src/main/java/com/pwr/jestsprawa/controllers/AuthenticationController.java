@@ -2,6 +2,7 @@ package com.pwr.jestsprawa.controllers;
 
 import com.pwr.jestsprawa.exceptions.EmailAlreadyInUseException;
 import com.pwr.jestsprawa.exceptions.InvalidJwtTokenException;
+import com.pwr.jestsprawa.exceptions.UserNotFoundException;
 import com.pwr.jestsprawa.model.LoginResponseDto;
 import com.pwr.jestsprawa.model.UserLoginDto;
 import com.pwr.jestsprawa.model.UserRegisterDto;
@@ -33,12 +34,17 @@ public class AuthenticationController {
 
     @ExceptionHandler(EmailAlreadyInUseException.class)
     public ResponseEntity<Object> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(InvalidJwtTokenException.class)
     public ResponseEntity<Object> handleInvalidJwtTokenException(InvalidJwtTokenException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 }
