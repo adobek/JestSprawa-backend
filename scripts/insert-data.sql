@@ -16,3 +16,7 @@ INSERT INTO app.Statuses VALUES
 (3, 'W realizacji'),
 (4, 'Zakończona'),
 (5, 'Anulowana');
+
+INSERT INTO app.Roles VALUES
+(1, 'zgłaszający'),
+(2, 'pracownik');
