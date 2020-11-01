@@ -49,7 +49,7 @@ public class AuthenticationService {
         return user;
     }
 
-    public LoginResponseDto authenticate(UserLoginDto userLoginDto) {
+    public LoginResponseDto login(UserLoginDto userLoginDto) {
         var authenticationToken = new UsernamePasswordAuthenticationToken(userLoginDto.getEmail(), userLoginDto.getPassword());
         Authentication authentication = authenticationManager.authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -57,6 +57,12 @@ public class AuthenticationService {
                 .orElseThrow(UserNotFoundException::new);
         var jwtToken = tokenProvider.createToken(authentication.getName(), RoleType.fromString(user.getRole().getName()).name());
         return LoginResponseDto.fromUserWithToken(user, jwtToken);
+    }
+
+    public String authenticate(String username) {
+        var user = userRepository.findOneByEmailIgnoreCase(username)
+                .orElseThrow(UserNotFoundException::new);
+        return tokenProvider.createToken(username, RoleType.fromString(user.getRole().getName()).name());
     }
 
 }
