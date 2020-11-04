@@ -48,4 +48,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Note> notes;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "employees")
+    private Set<Department> departments;
 }

@@ -30,6 +30,6 @@ public class Category {
     private Set<Issue> issues;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
-    private Set<DepartmentCategory> departmentsOfCategory;
+    @ManyToMany(mappedBy = "categories")
+    private Set<Department> departments;
 }

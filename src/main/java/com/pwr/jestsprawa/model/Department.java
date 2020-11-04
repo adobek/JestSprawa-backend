@@ -32,7 +32,21 @@ public class Department {
     private Set<Issue> issues;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "department")
-    private Set<DepartmentCategory> categoriesOfDepartment;
+    @ManyToMany
+    @JoinTable(
+            name="DepartmentCategories",
+            joinColumns = @JoinColumn(name = "department_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name="EmployeesDepartments",
+            joinColumns = @JoinColumn(name = "department_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> employees;
 
 }

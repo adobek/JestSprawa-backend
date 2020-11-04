@@ -1,7 +1,7 @@
 package com.pwr.jestsprawa.services;
 
 import com.pwr.jestsprawa.exceptions.CommuneNotFoundException;
-import com.pwr.jestsprawa.exceptions.DepartmentCategoryNotFoundException;
+import com.pwr.jestsprawa.exceptions.DepartmentNotFoundException;
 import com.pwr.jestsprawa.exceptions.StatusNotFoundException;
 import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.repositories.*;
@@ -26,24 +26,19 @@ public class IssueService {
 
     private final CommuneRepository communeRepository;
 
-    private final DepartmentCategoryRepository departmentCategoryRepository;
-
     private final StatusRepository statusRepository;
 
     private final IssueStatusRepository issueStatusRepository;
 
-    private Department findDepartmentOfCategoryAndCommune(Category category, Commune commune) {
-        var departmentCategory = departmentCategoryRepository
-                .findByCategoryAndDepartment_Institution_Commune(category, commune)
-                .orElseThrow(DepartmentCategoryNotFoundException::new);
-        return departmentCategory.getDepartment();
-    }
+    private final DepartmentRepository departmentRepository;
 
     @Transactional
     public Issue addIssue(AddIssueDto addIssueDto, User user, List<MultipartFile> files) {
         Commune commune = communeRepository.findOneByNameIgnoreCase(addIssueDto.getCommune())
                 .orElseThrow(CommuneNotFoundException::new);
-        Department department = findDepartmentOfCategoryAndCommune(addIssueDto.getCategory(), commune);
+        Department department = departmentRepository
+                .findByInstitution_CommuneAndCategories_Id(commune, addIssueDto.getCategory().getId())
+                .orElseThrow(DepartmentNotFoundException::new);;
         Status waitingStatus = statusRepository.findByNameIgnoreCase("oczekująca")
                 .orElseThrow(StatusNotFoundException::new);
 
