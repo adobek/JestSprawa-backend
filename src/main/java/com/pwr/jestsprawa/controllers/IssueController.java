@@ -1,8 +1,6 @@
 package com.pwr.jestsprawa.controllers;
 
-import com.pwr.jestsprawa.exceptions.IssueNotFoundException;
-import com.pwr.jestsprawa.exceptions.UploadFileException;
-import com.pwr.jestsprawa.exceptions.UserNotFoundException;
+import com.pwr.jestsprawa.exceptions.*;
 import com.pwr.jestsprawa.model.AddIssueDto;
 import com.pwr.jestsprawa.model.Issue;
 import com.pwr.jestsprawa.model.IssueDto;
@@ -52,6 +50,21 @@ public class IssueController {
     @ExceptionHandler(UploadFileException.class)
     public ResponseEntity<Object> handleUploadFileException(UploadFileException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(CommuneNotFoundException.class)
+    public ResponseEntity<Object> handleCommuneNotFoundException(CommuneNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(DepartmentNotFoundException.class)
+    public ResponseEntity<Object> handleDepartmentNotFoundException(DepartmentNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(StatusNotFoundException.class)
+    public ResponseEntity<Object> handleStatusNotFoundException(StatusNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
 }
