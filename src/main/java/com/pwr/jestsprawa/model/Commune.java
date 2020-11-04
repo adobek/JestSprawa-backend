@@ -3,6 +3,7 @@ package com.pwr.jestsprawa.model;
 import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Communes")
 @Data
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")

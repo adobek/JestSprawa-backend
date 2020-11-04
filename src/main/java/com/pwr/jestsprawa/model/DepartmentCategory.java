@@ -3,6 +3,7 @@ package com.pwr.jestsprawa.model;
 import com.pwr.jestsprawa.model.id.DepartmentCategoryId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "DepartmentCategories")
 @Data
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
 @IdClass(DepartmentCategoryId.class)

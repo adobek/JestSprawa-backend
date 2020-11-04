@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Users")
 @Data
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -31,6 +33,7 @@ public class User {
     @NotNull
     private String email;
 
+    @JsonIgnore
     @Column(name = "password_hash", length = 60)
     private String passwordHash;
 
