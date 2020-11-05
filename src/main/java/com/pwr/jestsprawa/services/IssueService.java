@@ -1,5 +1,6 @@
 package com.pwr.jestsprawa.services;
 
+import com.pwr.jestsprawa.exceptions.CategoryNotFoundException;
 import com.pwr.jestsprawa.exceptions.CommuneNotFoundException;
 import com.pwr.jestsprawa.exceptions.DepartmentNotFoundException;
 import com.pwr.jestsprawa.exceptions.StatusNotFoundException;
@@ -32,15 +33,19 @@ public class IssueService {
 
     private final DepartmentRepository departmentRepository;
 
+    private final CategoryRepository categoryRepository;
+
     @Transactional
     public Issue addIssue(AddIssueDto addIssueDto, User user, List<MultipartFile> files) {
         Commune commune = communeRepository.findOneByNameIgnoreCase(addIssueDto.getCommune())
                 .orElseThrow(CommuneNotFoundException::new);
         Department department = departmentRepository
-                .findByInstitution_CommuneAndCategories_Id(commune, addIssueDto.getCategory().getId())
+                .findByInstitution_CommuneAndCategories_Id(commune, addIssueDto.getCategoryId())
                 .orElseThrow(DepartmentNotFoundException::new);;
         Status waitingStatus = statusRepository.findByNameIgnoreCase("oczekująca")
                 .orElseThrow(StatusNotFoundException::new);
+        Category category = categoryRepository.findById(addIssueDto.getCategoryId())
+                .orElseThrow(CategoryNotFoundException::new);
 
         Issue issue = new Issue();
         issue.setCreationDate(LocalDateTime.now());
@@ -54,7 +59,7 @@ public class IssueService {
         issue.setIsAnonymous(addIssueDto.getIsAnonymous());
         issue.setUser(user);
         issue.setDepartment(department);
-        issue.setCategory(addIssueDto.getCategory());
+        issue.setCategory(category);
         issuesRepository.save(issue);
 
         Set<Image> images = new HashSet<>();

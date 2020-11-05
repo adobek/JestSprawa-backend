@@ -35,6 +35,6 @@ public class AddIssueDto {
     private Boolean isAnonymous;
 
     @NotNull
-    private Category category;
+    private Short categoryId;
 
 }
