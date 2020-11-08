@@ -22,7 +22,7 @@ public class IssueDto {
     private Boolean isAnonymous;
     private String category;
     private Integer user;
-    private String department;
+    private Integer department;
  //   private Set<String> images;
   //  private Set<String> statusesOfIssue;
   //  private Set<String> notes;
@@ -41,7 +41,7 @@ public class IssueDto {
                 issue.getIsAnonymous(),
                 issue.getCategory().getName(),
                 issue.getUser().getId(),
-                issue.getDepartment().getName()
+                issue.getDepartment().getId()
               //  issue.getImages(),
               //  issue.getStatusesOfIssue(),
               //  issue.getNotes()
