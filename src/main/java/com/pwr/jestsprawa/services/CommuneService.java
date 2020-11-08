@@ -4,10 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.pwr.jestsprawa.model.Commune;
-import com.pwr.jestsprawa.model.Department;
-import com.pwr.jestsprawa.model.LocationDataDto;
+import com.pwr.jestsprawa.exceptions.CommuneNotFoundException;
+import com.pwr.jestsprawa.exceptions.DepartmentNotFoundException;
+import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.model.nominatim.NominatimAddress;
+import com.pwr.jestsprawa.repositories.CategoryRepository;
 import com.pwr.jestsprawa.repositories.CommuneRepository;
 import com.pwr.jestsprawa.repositories.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,8 @@ public class CommuneService {
     private final CommuneRepository communeRepository;
 
     private final DepartmentRepository departmentRepository;
+
+    private final CategoryRepository categoryRepository;
 
     private NominatimAddress getAddress(double latitude, double longitude) {
         String baseUrl = "https://nominatim.openstreetmap.org";
@@ -60,6 +64,22 @@ public class CommuneService {
 
         locationDataDto.setIsAvailable(true);
         return locationDataDto;
+    }
+
+    public CommuneCategoriesDto getCategoriesInCommune(String communeName) {
+        Commune commune = communeRepository.findOneByNameIgnoreCase(communeName)
+                .orElseThrow(CommuneNotFoundException::new);
+        List<Department> departmentsInCommune = departmentRepository.findAllByInstitution_Commune(commune);
+        if (departmentsInCommune.isEmpty())
+            throw new DepartmentNotFoundException();
+        List<Category> availableCategories = departmentsInCommune.stream()
+                .flatMap(dep -> dep.getCategories().stream()).collect(Collectors.toList());
+        List<Category> allCategories = categoryRepository.findAll();
+
+        CommuneCategoriesDto communeCategoriesDto = new CommuneCategoriesDto();
+        communeCategoriesDto.setAvailableCategories(availableCategories);
+        communeCategoriesDto.setAllCategories(allCategories);
+        return communeCategoriesDto;
     }
 
 }
