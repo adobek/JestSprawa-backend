@@ -1,10 +1,7 @@
 package com.pwr.jestsprawa.controllers;
 
 import com.pwr.jestsprawa.exceptions.*;
-import com.pwr.jestsprawa.model.AddIssueDto;
-import com.pwr.jestsprawa.model.Issue;
-import com.pwr.jestsprawa.model.IssueDto;
-import com.pwr.jestsprawa.model.User;
+import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.repositories.IssuesRepository;
 import com.pwr.jestsprawa.repositories.UserRepository;
 import com.pwr.jestsprawa.services.IssueService;
@@ -33,6 +30,13 @@ public class IssueController {
     public Iterable<IssueDto> getIssuesByStatusId(@RequestParam int statusId) {
         return issuesRepository.findAllByStatusId(statusId).stream().map(IssueDto::fromIssue).collect(Collectors.toList());
     }
+
+    @GetMapping("/issues/basic")
+    public ResponseEntity<List<BasicIssueDataDto>> getAllIssuesBasicData() {
+        List<BasicIssueDataDto> issues = issueService.getAllIssuesBasicData();
+        return ResponseEntity.ok(issues);
+    }
+
     @GetMapping("/issues/{id}")
     public IssueDto getIssueById(@PathVariable int id){
         Issue issue = issuesRepository.findIssueById(id).orElseThrow(IssueNotFoundException::new);

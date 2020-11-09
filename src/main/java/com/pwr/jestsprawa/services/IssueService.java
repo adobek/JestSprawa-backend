@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class IssueService {
                 .orElseThrow(CommuneNotFoundException::new);
         Department department = departmentRepository
                 .findByInstitution_CommuneAndCategories_Id(commune, addIssueDto.getCategoryId())
-                .orElseThrow(DepartmentNotFoundException::new);;
+                .orElseThrow(DepartmentNotFoundException::new);
         Status waitingStatus = statusRepository.findByNameIgnoreCase("oczekująca")
                 .orElseThrow(StatusNotFoundException::new);
         Category category = categoryRepository.findById(addIssueDto.getCategoryId())
@@ -81,6 +82,12 @@ public class IssueService {
         issue.setImages(images);
         issue.setStatusesOfIssue(Collections.singleton(issueStatus));
         return issue;
+    }
+
+    public List<BasicIssueDataDto> getAllIssuesBasicData() {
+        List<Issue> issues = issuesRepository.findAll();
+        return issues.stream()
+                .map(BasicIssueDataDto::fromIssue).collect(Collectors.toList());
     }
 
 }
