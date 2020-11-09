@@ -30,7 +30,7 @@ public class IssueController {
         Issue issue = issuesRepository.findIssueById(id).orElseThrow(IssueNotFoundException::new);
         return IssueDto.fromIssue(issue);
     }
-    @PutMapping("issues/{id}")
+    @PutMapping("/issues/{id}")
     IssueDto replaceEmployee(@RequestBody Issue newIssue, @PathVariable int id) {
         Issue issue = issuesRepository.findIssueById(id).orElseThrow(IssueNotFoundException::new);
 
