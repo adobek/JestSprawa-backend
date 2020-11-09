@@ -31,7 +31,7 @@ public class IssueController {
         return IssueDto.fromIssue(issue);
     }
     @PutMapping("/issues/{id}")
-    IssueDto replaceEmployee(@RequestBody Issue newIssue, @PathVariable int id) {
+    IssueDto updateIssue(@RequestBody Issue newIssue, @PathVariable int id) {
         Issue issue = issuesRepository.findIssueById(id).orElseThrow(IssueNotFoundException::new);
 
         issue.setDepartment(newIssue.getDepartment());

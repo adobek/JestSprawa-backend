@@ -15,10 +15,13 @@ public class IssueStatusController {
     public IssueStatusController(IssueStatusRepository issueStatusRepository) {
         this.issueStatusRepository = issueStatusRepository;
     }
+    
     @GetMapping("/issuesStatuses")
-    public Iterable<IssueStatusDto> getIssuesStatuses(){
-        return issueStatusRepository.findAll().stream().map(IssueStatusDto::fromIssueStatus).collect(Collectors.toList());
+    public Iterable<IssueStatusDto> getStatusesByIssueId(@RequestParam int issueId){
+        return issueStatusRepository.findAllByIssueId(issueId).stream().map(IssueStatusDto::fromIssueStatus)
+                .collect(Collectors.toList());
     }
+
     @PostMapping("/issuesStatuses")
     IssueStatusDto newIssueStatus(@RequestBody IssueStatus newIssueStatus) {
         issueStatusRepository.save(newIssueStatus);
