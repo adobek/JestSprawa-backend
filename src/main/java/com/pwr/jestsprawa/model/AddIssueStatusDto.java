@@ -7,18 +7,17 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class IssueStatusDto {
+public class AddIssueStatusDto {
     private int issueId;
     private int statusId;
     private String description;
-    private LocalDateTime date;
 
-    public static IssueStatusDto fromIssueStatus(IssueStatus issueStatus) {
-        return new IssueStatusDto(
+
+    public static AddIssueStatusDto fromIssueStatus(IssueStatus issueStatus) {
+        return new AddIssueStatusDto(
                 issueStatus.getIssue().getId(),
                 issueStatus.getStatus().getId(),
-                issueStatus.getDescription(),
-                issueStatus.getDate()
+                issueStatus.getDescription()
         );
     }
 }

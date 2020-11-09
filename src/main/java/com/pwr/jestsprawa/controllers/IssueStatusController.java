@@ -1,10 +1,9 @@
 package com.pwr.jestsprawa.controllers;
 
-import com.pwr.jestsprawa.model.IssueDto;
+import com.pwr.jestsprawa.model.GetIssueStatusDto;
 import com.pwr.jestsprawa.model.IssueStatus;
-import com.pwr.jestsprawa.model.IssueStatusDto;
+import com.pwr.jestsprawa.model.AddIssueStatusDto;
 import com.pwr.jestsprawa.repositories.IssueStatusRepository;
-import com.pwr.jestsprawa.repositories.IssuesRepository;
 import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
 
@@ -17,14 +16,14 @@ public class IssueStatusController {
     }
     
     @GetMapping("/issuesStatuses")
-    public Iterable<IssueStatusDto> getStatusesByIssueId(@RequestParam int issueId){
-        return issueStatusRepository.findAllByIssueId(issueId).stream().map(IssueStatusDto::fromIssueStatus)
+    public Iterable<GetIssueStatusDto> getStatusesByIssueId(@RequestParam int issueId){
+        return issueStatusRepository.findAllByIssueId(issueId).stream().map(GetIssueStatusDto::fromIssueStatus)
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/issuesStatuses")
-    IssueStatusDto newIssueStatus(@RequestBody IssueStatus newIssueStatus) {
+    AddIssueStatusDto newIssueStatus(@RequestBody IssueStatus newIssueStatus) {
         issueStatusRepository.save(newIssueStatus);
-        return IssueStatusDto.fromIssueStatus(newIssueStatus);
+        return AddIssueStatusDto.fromIssueStatus(newIssueStatus);
     }
 }
