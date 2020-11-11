@@ -21,6 +21,13 @@ public class IssueStatusController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/issuesStatuses/issue")
+    public GetIssueStatusDto getIssueStatus(@RequestParam int issueId){
+        IssueStatus issueStatus = issueStatusRepository.findByIssueId(issueId);
+        return GetIssueStatusDto.fromIssueStatus(issueStatus);
+
+    }
+
     @PostMapping("/issuesStatuses")
     AddIssueStatusDto newIssueStatus(@RequestBody IssueStatus newIssueStatus) {
         issueStatusRepository.save(newIssueStatus);
