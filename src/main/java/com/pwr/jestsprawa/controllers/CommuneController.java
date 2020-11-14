@@ -21,7 +21,7 @@ public class CommuneController {
         return ResponseEntity.ok(locationDataDto);
     }
 
-    @GetMapping("/commune/{communeName}/categories")
+    @GetMapping("/communes/{communeName}/categories")
     public ResponseEntity<CommuneCategoriesDto> getCategoriesInCommune(@PathVariable String communeName) {
         CommuneCategoriesDto communeCategoriesDto = communeService.getCategoriesInCommune(communeName);
         return ResponseEntity.ok(communeCategoriesDto);
