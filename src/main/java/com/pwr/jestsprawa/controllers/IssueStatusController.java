@@ -1,18 +1,27 @@
 package com.pwr.jestsprawa.controllers;
 
-import com.pwr.jestsprawa.model.GetIssueStatusDto;
-import com.pwr.jestsprawa.model.IssueStatus;
-import com.pwr.jestsprawa.model.AddIssueStatusDto;
+import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.repositories.IssueStatusRepository;
+import com.pwr.jestsprawa.repositories.IssuesRepository;
+import com.pwr.jestsprawa.repositories.StatusRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
 public class IssueStatusController {
     private final IssueStatusRepository issueStatusRepository;
-    public IssueStatusController(IssueStatusRepository issueStatusRepository) {
+    private final IssuesRepository issueRepository;
+    private final StatusRepository statusRepository;
+
+    public IssueStatusController(IssueStatusRepository issueStatusRepository, IssuesRepository issueRepository, StatusRepository statusRepository) {
         this.issueStatusRepository = issueStatusRepository;
+        this.issueRepository = issueRepository;
+        this.statusRepository = statusRepository;
     }
     
     @GetMapping("/issuesStatuses")
@@ -29,8 +38,13 @@ public class IssueStatusController {
     }
 
     @PostMapping("/issuesStatuses")
-    AddIssueStatusDto newIssueStatus(@RequestBody IssueStatus newIssueStatus) {
-        issueStatusRepository.save(newIssueStatus);
-        return AddIssueStatusDto.fromIssueStatus(newIssueStatus);
+    AddIssueStatusDto newIssueStatus(@RequestBody GetIssueStatusDto newIssueStatus) {
+        Optional<Issue> i = issueRepository.findIssueById(newIssueStatus.getIssueId());
+        Optional<Status> status = statusRepository.findById(newIssueStatus.getIssueStatusId());
+        Issue issue = i.orElseThrow();
+        Status s = status.orElseThrow();
+        IssueStatus newStatus = new IssueStatus(issue, s);
+        newStatus = issueStatusRepository.save(newStatus);
+        return AddIssueStatusDto.fromIssueStatus(newStatus);
     }
 }

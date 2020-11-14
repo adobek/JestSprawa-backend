@@ -2,9 +2,7 @@ package com.pwr.jestsprawa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +13,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"category", "user", "department", "images", "statusesOfIssue", "notes"})
+@ToString(exclude = {"category", "user", "department", "images", "statusesOfIssue", "notes"})
 public class Issue {
 
     @Id
@@ -55,28 +55,28 @@ public class Issue {
     @Column(name = "is_anonymous")
     private Boolean isAnonymous;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
     private Department department;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "issue")
+    @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY)
     private Set<Image> images;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "issue")
+    @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY)
     private Set<IssueStatus> statusesOfIssue;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "issue")
+    @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY)
     private Set<Note> notes;
 
 }
