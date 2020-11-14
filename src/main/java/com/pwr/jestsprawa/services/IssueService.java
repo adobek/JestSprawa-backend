@@ -7,6 +7,7 @@ import com.pwr.jestsprawa.exceptions.StatusNotFoundException;
 import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.repositories.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -88,6 +89,11 @@ public class IssueService {
         List<Issue> issues = issuesRepository.findAll();
         return issues.stream()
                 .map(BasicIssueDataDto::fromIssue).collect(Collectors.toList());
+    }
+
+    public List<IssueDto> getMyIssues(User user) {
+        return issuesRepository.findAllByUser(user)
+                .stream().map(IssueDto::fromIssue).collect(Collectors.toList());
     }
 
 }

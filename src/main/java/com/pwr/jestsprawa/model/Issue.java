@@ -45,7 +45,6 @@ public class Issue {
     @Column(name = "house_number")
     private String houseNumber;
 
-    @NotNull
     @Column(length = 6)
     private String postcode;
 

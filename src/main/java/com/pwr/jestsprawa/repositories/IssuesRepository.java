@@ -2,6 +2,7 @@ package com.pwr.jestsprawa.repositories;
 
 
 import com.pwr.jestsprawa.model.Issue;
+import com.pwr.jestsprawa.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,5 +21,7 @@ public interface IssuesRepository extends JpaRepository<Issue, Integer> {
     List<Issue> findAllByStatusId(@Param("status") int status);
 
     Optional<Issue> findIssueById(int id);
+
+    List<Issue> findAllByUser(User user);
 
 }

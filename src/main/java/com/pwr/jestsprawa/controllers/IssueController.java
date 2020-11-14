@@ -51,6 +51,14 @@ public class IssueController {
         return ResponseEntity.ok(IssueDto.fromIssue(issue));
     }
 
+    @GetMapping("/issues/me")
+    public ResponseEntity<List<IssueDto>> getMyIssues(Authentication authentication) {
+        User user = userRepository.findOneByEmailIgnoreCase(authentication.getName())
+                .orElseThrow(UserNotFoundException::new);
+        List<IssueDto> myIssues = issueService.getMyIssues(user);
+        return ResponseEntity.ok(myIssues);
+    }
+
     @ExceptionHandler(UploadFileException.class)
     public ResponseEntity<Object> handleUploadFileException(UploadFileException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
