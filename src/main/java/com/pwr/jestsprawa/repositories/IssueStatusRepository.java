@@ -2,6 +2,7 @@ package com.pwr.jestsprawa.repositories;
 
 import com.pwr.jestsprawa.model.Issue;
 import com.pwr.jestsprawa.model.IssueStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -9,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
-public interface IssueStatusRepository extends CrudRepository<IssueStatus, Long> {
+public interface IssueStatusRepository extends JpaRepository<IssueStatus, Integer> {
     List<IssueStatus> findAll();
     List<IssueStatus> findAllByIssueId(@Param("issueId") int issueId);
     @Query(value="SELECT ss1.* FROM app.issuesstatuses ss1 LEFT JOIN app.issuesstatuses ss2" +

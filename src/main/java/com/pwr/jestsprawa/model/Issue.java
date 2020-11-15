@@ -11,9 +11,9 @@ import java.util.Set;
 @Entity
 @Table(name = "Issues")
 @Data
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"category", "user", "department", "images", "statusesOfIssue", "notes"})
 @ToString(exclude = {"category", "user", "department", "images", "statusesOfIssue", "notes"})
 public class Issue {
 
@@ -43,7 +43,6 @@ public class Issue {
     @Column(name = "house_number")
     private String houseNumber;
 
-    @NotNull
     @Column(length = 6)
     private String postcode;
 
@@ -55,28 +54,28 @@ public class Issue {
     @Column(name = "is_anonymous")
     private Boolean isAnonymous;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "department_id")
     private Department department;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "issue", cascade = CascadeType.ALL)
     private Set<Image> images;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "issue")
     private Set<IssueStatus> statusesOfIssue;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "issue", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "issue")
     private Set<Note> notes;
 
 }

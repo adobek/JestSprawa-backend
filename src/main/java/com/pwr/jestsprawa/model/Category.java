@@ -2,9 +2,7 @@ package com.pwr.jestsprawa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -12,8 +10,10 @@ import java.util.Set;
 @Entity
 @Table(name = "Categories")
 @Data
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"issues", "departments"})
 public class Category {
 
     @Id
@@ -24,10 +24,10 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private Set<Issue> issues;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "category")
-    private Set<DepartmentCategory> departmentsOfCategory;
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+    private Set<Department> departments;
 }

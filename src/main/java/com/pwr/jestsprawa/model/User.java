@@ -2,9 +2,7 @@ package com.pwr.jestsprawa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -12,8 +10,10 @@ import java.util.Set;
 @Entity
 @Table(name = "Users")
 @Data
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"departments", "notes", "issues", "role"})
 public class User {
 
     @Id
@@ -31,6 +31,7 @@ public class User {
     @NotNull
     private String email;
 
+    @JsonIgnore
     @Column(name = "password_hash", length = 60)
     private String passwordHash;
 
@@ -45,4 +46,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Note> notes;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "employees")
+    private Set<Department> departments;
 }

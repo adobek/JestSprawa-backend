@@ -1,5 +1,6 @@
 package com.pwr.jestsprawa.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,9 +9,11 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "IssuesStatuses")
 @Data
+@EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"issue", "status"})
 public class IssueStatus {
 
     @Id
@@ -24,6 +27,7 @@ public class IssueStatus {
     private String description;
 
     @NonNull
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name = "issue_id")
     private Issue issue;

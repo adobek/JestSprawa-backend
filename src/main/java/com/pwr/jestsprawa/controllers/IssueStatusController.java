@@ -39,12 +39,12 @@ public class IssueStatusController {
 
     @PostMapping("/issuesStatuses")
     AddIssueStatusDto newIssueStatus(@RequestBody GetIssueStatusDto newIssueStatus) {
-        Optional<Issue> i = issueRepository.findIssueById(newIssueStatus.getIssueId());
+        Optional<Issue> issue = issueRepository.findIssueById(newIssueStatus.getIssueId());
         Optional<Status> status = statusRepository.findById(newIssueStatus.getIssueStatusId());
-        Issue issue = i.orElseThrow();
-        Status s = status.orElseThrow();
-        IssueStatus newStatus = new IssueStatus(issue, s);
-        newStatus = issueStatusRepository.save(newStatus);
-        return AddIssueStatusDto.fromIssueStatus(newStatus);
+        Issue currentIssue = issue.orElseThrow();
+        Status newStatus = status.orElseThrow();
+        IssueStatus issueStatus = new IssueStatus(currentIssue, newStatus);
+        issueStatus = issueStatusRepository.save(issueStatus);
+        return AddIssueStatusDto.fromIssueStatus(issueStatus);
     }
 }

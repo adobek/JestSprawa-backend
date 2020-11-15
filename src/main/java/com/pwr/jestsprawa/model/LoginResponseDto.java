@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class LoginResponseDto {
 
     private Role role;
 
-    private Set<Issue> issues;
+    private Set<IssueDto> issues;
 
     public static LoginResponseDto fromUserWithToken(User user, String token) {
         return new LoginResponseDto(token,
@@ -27,6 +28,6 @@ public class LoginResponseDto {
                 user.getLastName(),
                 user.getEmail(),
                 user.getRole(),
-                user.getIssues());
+                user.getIssues().stream().map(IssueDto::fromIssue).collect(Collectors.toSet()));
     }
 }

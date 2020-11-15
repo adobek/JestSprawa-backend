@@ -2,7 +2,6 @@ package com.pwr.jestsprawa.controllers;
 
 import com.pwr.jestsprawa.exceptions.EmailAlreadyInUseException;
 import com.pwr.jestsprawa.exceptions.InvalidJwtTokenException;
-import com.pwr.jestsprawa.exceptions.UserNotFoundException;
 import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.services.AuthenticationService;
 import lombok.RequiredArgsConstructor;
