@@ -1,10 +1,7 @@
 package com.pwr.jestsprawa.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +12,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"id"})
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"institution", "issues", "categories", "employees"})
 public class Department {
 
     @Id
