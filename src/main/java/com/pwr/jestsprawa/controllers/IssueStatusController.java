@@ -1,5 +1,7 @@
 package com.pwr.jestsprawa.controllers;
 
+import com.pwr.jestsprawa.exceptions.IssueNotFoundException;
+import com.pwr.jestsprawa.exceptions.StatusNotFoundException;
 import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.repositories.IssueStatusRepository;
 import com.pwr.jestsprawa.repositories.IssuesRepository;
@@ -12,6 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/api")
 @CrossOrigin
 public class IssueStatusController {
     private final IssueStatusRepository issueStatusRepository;
@@ -41,8 +44,8 @@ public class IssueStatusController {
     AddIssueStatusDto newIssueStatus(@RequestBody GetIssueStatusDto newIssueStatus) {
         Optional<Issue> issue = issueRepository.findIssueById(newIssueStatus.getIssueId());
         Optional<Status> status = statusRepository.findById(newIssueStatus.getIssueStatusId());
-        Issue currentIssue = issue.orElseThrow();
-        Status newStatus = status.orElseThrow();
+        Issue currentIssue = issue.orElseThrow(IssueNotFoundException::new);
+        Status newStatus = status.orElseThrow(StatusNotFoundException::new);
         IssueStatus issueStatus = new IssueStatus(currentIssue, newStatus);
         issueStatus = issueStatusRepository.save(issueStatus);
         return AddIssueStatusDto.fromIssueStatus(issueStatus);
