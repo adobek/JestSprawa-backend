@@ -27,11 +27,11 @@ public class IssueDto {
     private Department department;
     private Set<String> images;
     private IssueStatus currentIssueStatus;
-  //  private Set<String> statusesOfIssue;
+    private Set<IssueStatus> statusesOfIssue;
   //  private Set<String> notes;
 
     public static IssueDto fromIssue(Issue issue){
-        IssueStatus issueStatus = issue.getStatusesOfIssue()
+        IssueStatus currentIssueStatus = issue.getStatusesOfIssue()
                 .stream()
                 .max(Comparator.comparing(IssueStatus::getDate))
                 .orElseThrow(IssueStatusNotFoundException::new);
@@ -51,8 +51,8 @@ public class IssueDto {
                 issue.getUser(),
                 issue.getDepartment(),
                 issue.getImages().stream().map(Image::getPath).collect(Collectors.toSet()),
-                issueStatus
-              //  issue.getStatusesOfIssue(),
+                currentIssueStatus,
+                issue.getStatusesOfIssue()
               //  issue.getNotes()
 
         );
