@@ -31,6 +31,6 @@ public class NominatimAddress implements Serializable {
 
     private String commune;
 
-    private String country;
+    private String country_code;
 
 }

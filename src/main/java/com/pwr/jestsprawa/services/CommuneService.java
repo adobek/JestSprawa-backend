@@ -51,7 +51,7 @@ public class CommuneService {
         Optional<Commune> commune = communeRepository.findOneByNameIgnoreCase(address.getCommune());
         LocationDataDto locationDataDto = new LocationDataDto();
         locationDataDto.setAddress(address);
-        if (!address.getCountry().equalsIgnoreCase("Polska") || commune.isEmpty()) {
+        if (!address.getCountry_code().equalsIgnoreCase("pl") || commune.isEmpty()) {
             locationDataDto.setIsAvailable(false);
             return locationDataDto;
         }
