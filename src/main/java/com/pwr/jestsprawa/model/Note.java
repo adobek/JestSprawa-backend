@@ -25,7 +25,7 @@ public class Note {
     private String description;
 
     @NotNull
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", insertable = false)
     private LocalDateTime creationDate;
 
     @JsonIgnore
