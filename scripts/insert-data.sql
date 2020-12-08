@@ -20,3 +20,28 @@ INSERT INTO app.Statuses VALUES
 INSERT INTO app.Roles VALUES
 (1, 'zgłaszający'),
 (2, 'pracownik');
+
+INSERT INTO app.communes VALUES
+(1, 'Wrocław'),
+(2, 'Katowice');
+
+INSERT INTO app.institutions VALUES
+(1, 'Urząd Miejski Wrocław', 1),
+(2, 'Urząd Miejski Katowice', 2);
+
+INSERT INTO app.departments VALUES
+(1, 'Zarząd dróg', 1),
+(2, 'Dyrekcja ochrony środowiska', 1);
+
+INSERT INTO app.users VALUES
+(1, 'Jo', 'Ko', 'joko@test.pl', '1234', 1);
+
+INSERT INTO app.issues VALUES
+(1, NOW(), 'Piekielnie ważna sprawa', 51, 17, 'Głowackiego', '12', '52-240', 'Sępolno', false, 1, 1, 1),
+(2, NOW(), 'Piekielnie ważna sprawa', 51, 17, 'Głowackiego', '12', '52-240', 'Sępolno', true, 3, 1, 1),
+(3, NOW(), 'Piekielnie ważna sprawa', 51, 17, 'Głowackiego', '12', '52-240', 'Sępolno', false, 2, 1, 2);
+
+INSERT INTO app.issuesstatuses VALUES
+(1, NOW(), 1, 1, null),
+(2, NOW(), 2, 1, null),
+(3, NOW(), 3, 2, null);
