@@ -73,15 +73,6 @@ CREATE TABLE app.Issues
 	CONSTRAINT is_fk_department FOREIGN KEY(department_id) REFERENCES app.Departments(id)
 );
 
-CREATE TABLE app.Reactions
-(
-	issue_id integer,
-	user_id integer,
-	CONSTRAINT re_fk_issue FOREIGN KEY(issue_id) REFERENCES app.Issues(id),
-	CONSTRAINT re_fk_user FOREIGN KEY(user_id) REFERENCES app.Users(id),
-	PRIMARY KEY(issue_id, user_id)
-);
-
 CREATE TABLE app.DepartmentCategories
 (
 	department_id integer,

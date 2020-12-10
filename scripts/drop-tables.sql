@@ -1,7 +1,6 @@
 drop table app.issuesstatuses;
 drop table app.departmentcategories;
 drop table app.employeesdepartments;
-drop table app.reactions;
 drop table app.images;
 drop table app.attachments;
 drop table app.notes;
