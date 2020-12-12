@@ -2,6 +2,7 @@ package com.pwr.jestsprawa.controllers;
 
 import com.pwr.jestsprawa.exceptions.*;
 import com.pwr.jestsprawa.model.*;
+import com.pwr.jestsprawa.repositories.DepartmentRepository;
 import com.pwr.jestsprawa.repositories.IssuesRepository;
 import com.pwr.jestsprawa.repositories.UserRepository;
 import com.pwr.jestsprawa.services.IssueService;
@@ -30,9 +31,13 @@ public class IssueController {
 
     private final UserRepository userRepository;
 
+    private final DepartmentRepository departmentRepository;
+
     @GetMapping("/issues")
-    public Iterable<IssueDto> getIssuesByStatusId(@RequestParam int statusId) {
-        return issuesRepository.findAllByStatusId(statusId).stream().map(IssueDto::fromIssue).collect(Collectors.toList());
+    public Iterable<IssueDto> getIssuesByStatusId(@RequestParam int statusId, Authentication authentication) {
+        User user = userRepository.findOneByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new);
+        List<Department> departments = departmentRepository.findAllByEmployees_Id(user.getId());
+        return issuesRepository.findAllByStatusId(statusId, departments).stream().map(IssueDto::fromIssue).collect(Collectors.toList());
     }
 
     @GetMapping("/issues/basic")
