@@ -3,6 +3,7 @@ package com.pwr.jestsprawa.controllers;
 import com.pwr.jestsprawa.exceptions.*;
 import com.pwr.jestsprawa.model.*;
 import com.pwr.jestsprawa.repositories.DepartmentRepository;
+import com.pwr.jestsprawa.repositories.ImageRepository;
 import com.pwr.jestsprawa.repositories.IssuesRepository;
 import com.pwr.jestsprawa.repositories.UserRepository;
 import com.pwr.jestsprawa.services.IssueService;
@@ -33,11 +34,21 @@ public class IssueController {
 
     private final DepartmentRepository departmentRepository;
 
+    private final ImageRepository imageRepository;
+
     @GetMapping("/issues")
     public Iterable<IssueDto> getIssuesByStatusId(@RequestParam int statusId, Authentication authentication) {
         User user = userRepository.findOneByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new);
         List<Department> departments = departmentRepository.findAllByEmployees_Id(user.getId());
         return issuesRepository.findAllByStatusId(statusId, departments).stream().map(IssueDto::fromIssue).collect(Collectors.toList());
+    }
+
+    @GetMapping("/issues/all")
+    public ResponseEntity<List<IssueDto>> getIssues(Authentication authentication) {
+        User user = userRepository.findOneByEmailIgnoreCase(authentication.getName()).orElseThrow(UserNotFoundException::new);
+        List<Department> departments = departmentRepository.findAllByEmployees_Id(user.getId());
+        List<IssueDto> issues = issuesRepository.findAllByDepartmentIn(departments).stream().map(IssueDto::fromIssue).collect(Collectors.toList());
+        return ResponseEntity.ok(issues);
     }
 
     @GetMapping("/issues/basic")
@@ -77,6 +88,11 @@ public class IssueController {
         return ResponseEntity.ok(myIssues);
     }
 
+    @GetMapping("/issues/{id}/images")
+    public ResponseEntity<List<Image>> getImagesForIssue(@PathVariable int id) {
+        List<Image> images = imageRepository.findAllByIssue_Id(id);
+        return ResponseEntity.ok(images);
+    }
     @ExceptionHandler(UploadFileException.class)
     public ResponseEntity<Object> handleUploadFileException(UploadFileException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
